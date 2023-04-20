@@ -14,7 +14,13 @@ lv_obj_t * ui_Slider2;
 lv_obj_t * ui_Label2;
 lv_obj_t * ui_Checkbox2;
 lv_obj_t * ui_Switch1;
+void ui_event_Dropdown2(lv_event_t * e);
 lv_obj_t * ui_Dropdown2;
+lv_obj_t * ui_Screen2;
+lv_obj_t * ui_Chart1;
+lv_obj_t * ui_Label3;
+void ui_event_Dropdown3(lv_event_t * e);
+lv_obj_t * ui_Dropdown3;
 lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -28,6 +34,24 @@ lv_obj_t * ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+void ui_event_Dropdown2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED) {
+        _ui_screen_change(ui_Screen2, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0);
+        _ui_dropdown_set_property(ui_Dropdown3, _UI_DROPDOWN_PROPERTY_SELECTED, 1);
+    }
+}
+void ui_event_Dropdown3(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_VALUE_CHANGED) {
+        _ui_screen_change(ui_Screen1, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0);
+        _ui_dropdown_set_property(ui_Dropdown2, _UI_DROPDOWN_PROPERTY_SELECTED, 0);
+    }
+}
 
 ///////////////////// SCREENS ////////////////////
 void ui_Screen1_screen_init(void)
@@ -86,12 +110,54 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_align(ui_Switch1, LV_ALIGN_CENTER);
 
     ui_Dropdown2 = lv_dropdown_create(ui_Screen1);
+    lv_dropdown_set_options(ui_Dropdown2, "Screen 1\nScreen 2\n");
     lv_obj_set_width(ui_Dropdown2, 150);
     lv_obj_set_height(ui_Dropdown2, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_Dropdown2, 64);
     lv_obj_set_y(ui_Dropdown2, -44);
     lv_obj_set_align(ui_Dropdown2, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Dropdown2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+
+    lv_obj_add_event_cb(ui_Dropdown2, ui_event_Dropdown2, LV_EVENT_ALL, NULL);
+
+}
+void ui_Screen2_screen_init(void)
+{
+    ui_Screen2 = lv_obj_create(NULL);
+    lv_obj_clear_flag(ui_Screen2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_Chart1 = lv_chart_create(ui_Screen2);
+    lv_obj_set_width(ui_Chart1, 200);
+    lv_obj_set_height(ui_Chart1, 100);
+    lv_obj_set_x(ui_Chart1, 6);
+    lv_obj_set_y(ui_Chart1, 38);
+    lv_obj_set_align(ui_Chart1, LV_ALIGN_CENTER);
+    lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
+    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_X, 10, 5, 5, 2, true, 50);
+    lv_chart_set_axis_tick(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 5, 2, true, 50);
+    lv_chart_series_t * ui_Chart1_series_1 = lv_chart_add_series(ui_Chart1, lv_color_hex(0x808080),
+                                                                 LV_CHART_AXIS_PRIMARY_Y);
+    static lv_coord_t ui_Chart1_series_1_array[] = { 100, 90, 80, 70, 60, 50, 40, 20, 0, -10 };
+    lv_chart_set_ext_y_array(ui_Chart1, ui_Chart1_series_1, ui_Chart1_series_1_array);
+
+    ui_Label3 = lv_label_create(ui_Screen2);
+    lv_obj_set_width(ui_Label3, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Label3, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Label3, -1);
+    lv_obj_set_y(ui_Label3, -83);
+    lv_obj_set_align(ui_Label3, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Label3, "TABEL CUAN FIGO");
+
+    ui_Dropdown3 = lv_dropdown_create(ui_Screen2);
+    lv_dropdown_set_options(ui_Dropdown3, "Screen 1\nScreen 2\n");
+    lv_obj_set_width(ui_Dropdown3, 150);
+    lv_obj_set_height(ui_Dropdown3, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Dropdown3, 64);
+    lv_obj_set_y(ui_Dropdown3, -44);
+    lv_obj_set_align(ui_Dropdown3, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Dropdown3, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+
+    lv_obj_add_event_cb(ui_Dropdown3, ui_event_Dropdown3, LV_EVENT_ALL, NULL);
 
 }
 
@@ -102,6 +168,7 @@ void ui_init(void)
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     ui_Screen1_screen_init();
+    ui_Screen2_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_Screen1);
 }

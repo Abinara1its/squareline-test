@@ -30,7 +30,13 @@ extern lv_obj_t * ui_Slider2;
 extern lv_obj_t * ui_Label2;
 extern lv_obj_t * ui_Checkbox2;
 extern lv_obj_t * ui_Switch1;
+void ui_event_Dropdown2(lv_event_t * e);
 extern lv_obj_t * ui_Dropdown2;
+extern lv_obj_t * ui_Screen2;
+extern lv_obj_t * ui_Chart1;
+extern lv_obj_t * ui_Label3;
+void ui_event_Dropdown3(lv_event_t * e);
+extern lv_obj_t * ui_Dropdown3;
 extern lv_obj_t * ui____initial_actions0;
 
 
